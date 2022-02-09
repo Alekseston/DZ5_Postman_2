@@ -1,0 +1,27 @@
+var schema = {
+  "type": "object",
+  "properties":{
+    "name": {"type": "string"},
+    "age": {"type": "integer"},
+    "salary":{"type": "integer"},
+    "u_salary_1.5_year":{"type": "integer"},
+    "family":{
+    "type": "object",
+    "properties": {
+    "children": {"type": "array",
+                    "items": [{"type": "array", 
+        "items": [{"type": "string"},{"type": "integer"}]},
+        {"type": "array", "items": [{"type": "string"},{"type": "integer"}]
+                   }]},
+    "u_salary_1_5_year":{"type": "integer"}},
+                   "required": [
+                    "children",
+                    "u_salary_1_5_year"
+                    ]
+     }},
+  "required": [
+    "name",
+    "age",
+    "salary",  
+  ]
+  };
