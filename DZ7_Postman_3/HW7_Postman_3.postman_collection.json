@@ -924,6 +924,82 @@
 			"response": []
 		},
 		{
+			"name": "8. / *** Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"// 1) получить список валют\r",
+							"// 2) итерировать список валют\r",
+							"// 3) в каждой итерации отправлять запрос на сервер для получения курса каждой валюты\r",
+							"// 4) если возвращается 500 код, переходим к следующей итреации\r",
+							"// 5) если получаем 200 код, проверяем response json на наличие поля \"Cur_OfficialRate\"\r",
+							"// 6) если поле есть, пишем в консоль инфу про валюту в виде response\r",
+							"var responseJSON = pm.response.json();\r",
+							"token = pm.environment.get(\"token_1\");\r",
+							"     for(var i in responseJSON){\r",
+							"    var cur = responseJSON[i].Cur_ID;\r",
+							"    pm.sendRequest({\r",
+							"    url: \"http://162.55.220.72:5005/curr_byn\",\r",
+							"    method: 'POST',\r",
+							"    header: {'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'formdata',\r",
+							"    'formdata':[{key: \"auth_token\", \r",
+							"value: environment.token_1, type: \"text\"},{key: \"curr_code\",value: cur, type: \"integer\"}]\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"        if (res.code == 200){if (res.json().Cur_OfficialRate){\r",
+							"        var W = JSON.stringify(res.json());\r",
+							"        console.log(W); \r",
+							"        JSON.parse(W);       \r",
+							"            };}\r",
+							"        else {if (res.code == 500){postman.setNextRequest();}\r",
+							"        else{console.log(err);}}\r",
+							"    }\r",
+							"    )};\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "auth_token",
+							"value": "{{token_1}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://162.55.220.72:5005/currency",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"currency"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "8. / *** Copy_",
 			"event": [
 				{
