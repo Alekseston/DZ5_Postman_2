@@ -924,7 +924,7 @@
 			"response": []
 		},
 		{
-			"name": "8. / *** Copy",
+			"name": "8. / *** Copy_",
 			"event": [
 				{
 					"listen": "test",
@@ -933,16 +933,13 @@
 							"pm.test(\"Status code is 200\", function () {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});\r",
-							"// 1) получить список валют\r",
-							"// 2) итерировать список валют\r",
-							"// 3) в каждой итерации отправлять запрос на сервер для получения курса каждой валюты\r",
-							"// 4) если возвращается 500 код, переходим к следующей итреации\r",
-							"// 5) если получаем 200 код, проверяем response json на наличие поля \"Cur_OfficialRate\"\r",
-							"// 6) если поле есть, пишем в консоль инфу про валюту в виде response\r",
 							"var responseJSON = pm.response.json();\r",
 							"token = pm.environment.get(\"token_1\");\r",
+							"    // var Cur_IDs = [];\r",
+							"    var RESP_ = [];\r",
 							"     for(var i in responseJSON){\r",
 							"    var cur = responseJSON[i].Cur_ID;\r",
+							"    // Cur_IDs.push(responseJSON[i].Cur_Abbreviation);\r",
 							"    pm.sendRequest({\r",
 							"    url: \"http://162.55.220.72:5005/curr_byn\",\r",
 							"    method: 'POST',\r",
@@ -956,8 +953,9 @@
 							"}, function (err, res) {\r",
 							"        if (res.code == 200){if (res.json().Cur_OfficialRate){\r",
 							"        var W = JSON.stringify(res.json());\r",
-							"        console.log(W); \r",
-							"        JSON.parse(W);       \r",
+							"        console.log(W);      \r",
+							"        RESP_.push(W);\r",
+							"        pm.environment.set(\"RESP_\",RESP_);        \r",
 							"            };}\r",
 							"        else {if (res.code == 500){postman.setNextRequest();}\r",
 							"        else{console.log(err);}}\r",
@@ -1000,7 +998,7 @@
 			"response": []
 		},
 		{
-			"name": "8. / *** Copy_",
+			"name": "8. / *** Copy_ Copy",
 			"event": [
 				{
 					"listen": "test",
@@ -1012,6 +1010,7 @@
 							"var responseJSON = pm.response.json();\r",
 							"token = pm.environment.get(\"token_1\");\r",
 							"    // var Cur_IDs = [];\r",
+							"    var count = 0;\r",
 							"    var RESP_ = [];\r",
 							"     for(var i in responseJSON){\r",
 							"    var cur = responseJSON[i].Cur_ID;\r",
@@ -1027,14 +1026,17 @@
 							"value: environment.token_1, type: \"text\"},{key: \"curr_code\",value: cur, type: \"integer\"}]\r",
 							"    }\r",
 							"}, function (err, res) {\r",
-							"        if (res.code == 200){if (res.json().Cur_OfficialRate){\r",
-							"        var W = JSON.stringify(res.json());\r",
-							"        console.log(W);      \r",
+							"        count +=1;\r",
+							"        if(res.code == 200){if (res.json().Cur_OfficialRate){\r",
+							"        var W = JSON.stringify(res.json());      \r",
 							"        RESP_.push(W);\r",
 							"        pm.environment.set(\"RESP_\",RESP_);        \r",
 							"            };}\r",
 							"        else {if (res.code == 500){postman.setNextRequest();}\r",
 							"        else{console.log(err);}}\r",
+							"        if(count == responseJSON.length){\r",
+							"            console.log(RESP_);\r",
+							"        };\r",
 							"    }\r",
 							"    )};\r",
 							""
